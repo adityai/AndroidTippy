@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.getColor(this, R.color.color_best_tip)
         ) as Int
         textViewTipDescription.setTextColor(color)
+        displayFunnyMessage()
     }
 
     private fun computeTipAndTotal() {
