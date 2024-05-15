@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textTipAmount: TextView
     private lateinit var textTotalAmount: TextView
     private lateinit var textViewTipDescription: TextView
+    private lateinit var textViewFunnyMessage: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         textTipAmount = findViewById(R.id.textTipAmount)
         textTotalAmount = findViewById(R.id.textTotalAmount)
         textViewTipDescription = findViewById(R.id.textViewTipDescription)
+        textViewFunnyMessage = findViewById(R.id.textViewFunnyMessage)
 
         seekbarTipPercentage.progress = INITIAL_TIP_PERCENT
         textViewTipPercentage.text = "$INITIAL_TIP_PERCENT%"
@@ -63,6 +65,20 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+        displayFunnyMessage()
+    }
+
+    // function to display a random funny message about tips
+    private fun displayFunnyMessage() {
+        val funnyMessages = listOf(
+            "You are a good tipper",
+            "You are a great tipper",
+            "You are a wonderful tipper",
+            "You are a master tipper",
+            "You are a legendary tipper"
+        )
+        val randomFunnyMessage = funnyMessages.random()
+        textViewFunnyMessage.text = randomFunnyMessage
     }
 
     private fun updateTipDescription(tipPercentage: Int) {
