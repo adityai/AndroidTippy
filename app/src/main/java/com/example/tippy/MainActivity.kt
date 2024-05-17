@@ -37,9 +37,17 @@ class MainActivity : AppCompatActivity() {
         tippy()
     }
 
+    // Function to get a random date in yyyy-mm-dd format
+    private fun randomDate(): String {
+        val year = (2014..2024).random()
+        val month = (1..12).random()
+        val day = (1..28).random()
+        return "$year-$month-$day"
+    }
+
     private fun curiosity() {
         val apiKey = "5M12ifePfRKP7c9ywgRFXLYq5J8JHasG8zOKaect"
-        val earthDate = "2014-01-31"
+        val earthDate = randomDate()
 
         val url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=$apiKey&earth_date=$earthDate"
 
