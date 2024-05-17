@@ -63,10 +63,17 @@ class MainActivity : AppCompatActivity() {
                     val randomPhoto = photos.random()
                     Log.d("Photo", "ID: ${randomPhoto.id}, URL: ${randomPhoto.img_src}, Date: ${randomPhoto.earth_date}")
                     val imageView = findViewById<ImageView>(R.id.curiosityImageView)
-                    runOnUiThread {
+
+                    // Set OnClickListener to display a random image when curiosityImageView is clicked
+                    imageView.setOnClickListener {
+                        var randomPhoto = photos.random()
                         Picasso.get().load(randomPhoto.img_src).into(imageView)
                     }
-                } else {
+
+                    // Initially, display a random image
+                    runOnUiThread {
+                        Picasso.get().load(randomPhoto.img_src).into(imageView)
+                    }                } else {
                     Log.e("API Call", "Failed: ${response.code}")
                 }
             }
