@@ -63,13 +63,9 @@ class MainActivity : AppCompatActivity() {
                     val randomPhoto = photos.random()
                     Log.d("Photo", "ID: ${randomPhoto.id}, URL: ${randomPhoto.img_src}, Date: ${randomPhoto.earth_date}")
                     val imageView = findViewById<ImageView>(R.id.curiosityImageView)
-                    runOnUiThread { Picasso.get().load(randomPhoto.img_src).into(imageView) }
-
-//                    Log.d("Photo", "ID: ${photos[0].id}, URL: ${photos[0].img_src}, Date: ${photos[0].earth_date}")
-//                    val imageView = findViewById<ImageView>(R.id.curiosityImageView)
-//                    runOnUiThread {
-//                        Picasso.get().load(photos[0].img_src).into(imageView)
-//                    }
+                    runOnUiThread {
+                        Picasso.get().load(randomPhoto.img_src).into(imageView)
+                    }
                 } else {
                     Log.e("API Call", "Failed: ${response.code}")
                 }
