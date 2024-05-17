@@ -26,6 +26,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        tippy()
+    }
+
+    private fun tippy() {
         editableTextBaseAmount = findViewById(R.id.editableTextBaseAmount)
         seekbarTipPercentage = findViewById(R.id.seekBarTipPercentage)
         textViewTipPercentage = findViewById(R.id.textViewTipPercentage)
