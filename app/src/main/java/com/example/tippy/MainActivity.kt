@@ -10,6 +10,11 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import okhttp3.OkHttpClient
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
+import javax.net.ssl.*
 
 private const val TAG = "MainActivity"
 private const val INITIAL_TIP_PERCENT = 15
@@ -26,7 +31,91 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        curiosity()
         tippy()
+    }
+
+    private fun curiosity() {
+        val apiKey = "5M12ifePfRKP7c9ywgRFXLYq5J8JHasG8zOKaect"
+        val earthDate = "2014-01-31"
+
+        val url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=$apiKey&earth_date=$earthDate"
+
+        val client = getUnsafeOkHttpClient()
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("API Call", "Failed: ${e.message}")
+            }
+//                        Log.d("Photo", "ID: ${it.id}, URL: ${it.imgSrc}, Date: ${it.earthDate}")
+
+            override fun onResponse(call: Call, response: Response) {
+                if (response.isSuccessful) {
+                    val jsonData = response.body?.string()
+                    val photos = parseJson(jsonData)
+                    Log.d("Photo", "ID: ${photos[0].id}, URL: ${photos[0].img_src}, Date: ${photos[0].earth_date}")
+//                    photos.forEach {
+//                        Log.d("url", it.img_src)
+//                    }
+                    // Now you can display the data in your UI
+                } else {
+                    Log.e("API Call", "Failed: ${response.code}")
+                }
+            }
+        })
+    }
+
+    data class Photo(
+        val id: Int,
+        val img_src: String,
+        val earth_date: String
+    )
+
+
+    private fun parseJson(jsonData: String?): List<Photo> {
+        val photos = mutableListOf<Photo>()
+        val jsonObject = JSONObject(jsonData)
+        val jsonArray = jsonObject.getJSONArray("photos")
+        for (i in 0 until jsonArray.length()) {
+            val photoJson = jsonArray.getJSONObject(i)
+            val id = photoJson.getInt("id")
+            val imgSrc = photoJson.getString("img_src")
+            val earthDate = photoJson.getString("earth_date")
+            photos.add(Photo(id, imgSrc, earthDate))
+        }
+        return photos
+    }
+
+    private fun getUnsafeOkHttpClient(): OkHttpClient {
+        try {
+            val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+                override fun checkClientTrusted(chain: Array<out java.security.cert.X509Certificate>?, authType: String?) {
+                }
+
+                override fun checkServerTrusted(chain: Array<out java.security.cert.X509Certificate>?, authType: String?) {
+                }
+
+                override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> {
+                    return arrayOf()
+                }
+            })
+
+            val sslContext = SSLContext.getInstance("SSL")
+            sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+
+            val sslSocketFactory = sslContext.socketFactory
+
+            return OkHttpClient.Builder()
+                .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
+                .hostnameVerifier { _, _ -> true }
+                .build()
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
     }
 
     private fun tippy() {
