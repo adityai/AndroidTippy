@@ -71,17 +71,21 @@ class MainActivity : AppCompatActivity() {
                     val randomPhoto = photos.random()
                     Log.d("Photo", "ID: ${randomPhoto.id}, URL: ${randomPhoto.img_src}, Date: ${randomPhoto.earth_date}")
                     val imageView = findViewById<ImageView>(R.id.curiosityImageView)
+                    val earthDateTextView = findViewById<TextView>(R.id.earthDateTextView)
 
                     // Set OnClickListener to display a random image when curiosityImageView is clicked
                     imageView.setOnClickListener {
                         var randomPhoto = photos.random()
                         Picasso.get().load(randomPhoto.img_src).into(imageView)
+                        earthDateTextView.text = randomPhoto.earth_date
                     }
 
                     // Initially, display a random image
                     runOnUiThread {
                         Picasso.get().load(randomPhoto.img_src).into(imageView)
-                    }                } else {
+                        earthDateTextView.text = randomPhoto.earth_date
+                    }
+                } else {
                     Log.e("API Call", "Failed: ${response.code}")
                 }
             }
