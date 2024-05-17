@@ -6,10 +6,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.squareup.picasso.Picasso
 import okhttp3.OkHttpClient
 import okhttp3.*
 import org.json.JSONObject
@@ -58,10 +60,10 @@ class MainActivity : AppCompatActivity() {
                     val jsonData = response.body?.string()
                     val photos = parseJson(jsonData)
                     Log.d("Photo", "ID: ${photos[0].id}, URL: ${photos[0].img_src}, Date: ${photos[0].earth_date}")
-//                    photos.forEach {
-//                        Log.d("url", it.img_src)
-//                    }
-                    // Now you can display the data in your UI
+                    val imageView = findViewById<ImageView>(R.id.curiosityImageView)
+                    runOnUiThread {
+                        Picasso.get().load(photos[0].img_src).into(imageView)
+                    }
                 } else {
                     Log.e("API Call", "Failed: ${response.code}")
                 }
