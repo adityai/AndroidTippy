@@ -76,12 +76,14 @@ class MainActivity : AppCompatActivity() {
                             var randomPhoto = photos.random()
                             Picasso.get().load(randomPhoto.img_src).into(imageView)
                             earthDateTextView.text = randomPhoto.earth_date
+                            imageView.contentDescription = randomPhoto.id.toString()
                         }
 
                         // Initially, display a random image
                         runOnUiThread {
                             Picasso.get().load(randomPhoto.img_src).into(imageView)
                             earthDateTextView.text = randomPhoto.earth_date
+                            imageView.contentDescription = randomPhoto.id.toString()
                         }
                     } else {
                         Log.i("Curiosity:", "No photos found. Retrying...")
@@ -97,6 +99,16 @@ class MainActivity : AppCompatActivity() {
         val anotherEarthDateButton = findViewById<Button>(R.id.anotherEarthDateButton)
         anotherEarthDateButton.setOnClickListener {
             curiosity()
+        }
+
+        // Set OnClickListener on saveButton to save the earth date and id of the image currently displayed on the screen
+        val saveButton = findViewById<Button>(R.id.saveButton)
+        saveButton.setOnClickListener {
+            val imageView = findViewById<ImageView>(R.id.curiosityImageView)
+            val earthDateTextView = findViewById<TextView>(R.id.earthDateTextView)
+            val earthDate = earthDateTextView.text.toString()
+            val id = imageView.contentDescription.toString()
+            Log.d("Save Photo Info:", "ID: $id, Date: $earthDate")
         }
     }
 

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="28dp"
         android:text="Base"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,7 +20,7 @@
         android:id="@+id/textViewTipPercentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="0%"
         app:layout_constraintEnd_toEndOf="@+id/tvBaseLabel"
         app:layout_constraintTop_toBottomOf="@+id/tvBaseLabel" />
@@ -29,7 +29,7 @@
         android:id="@+id/tvBaseLabel3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="Tip"
         app:layout_constraintEnd_toEndOf="@+id/textViewTipPercentage"
         app:layout_constraintTop_toBottomOf="@+id/textViewTipPercentage" />
@@ -38,7 +38,7 @@
         android:id="@+id/tvTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="Total"
         app:layout_constraintEnd_toEndOf="@+id/tvBaseLabel3"
         app:layout_constraintTop_toBottomOf="@+id/tvBaseLabel3" />
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="14dp"
         android:ems="10"
         android:hint="Bill amount"
         android:inputType="numberDecimal"
@@ -61,7 +61,7 @@
         style="@style/Widget.AppCompat.SeekBar"
         android:layout_width="211dp"
         android:layout_height="18dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="15dp"
         android:max="30"
         app:layout_constraintStart_toStartOf="@+id/editableTextBaseAmount"
         app:layout_constraintTop_toBottomOf="@+id/editableTextBaseAmount" />
@@ -77,7 +77,7 @@
         android:id="@+id/textTipAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text=""
         app:layout_constraintStart_toStartOf="@+id/seekBarTipPercentage"
         app:layout_constraintTop_toBottomOf="@+id/seekBarTipPercentage" />
@@ -86,7 +86,7 @@
         android:id="@+id/textTotalAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text=""
         app:layout_constraintStart_toStartOf="@+id/textTipAmount"
         app:layout_constraintTop_toBottomOf="@+id/textTipAmount" />
@@ -107,7 +107,7 @@
         android:id="@+id/textViewFunnyMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:fontFamily="sans-serif"
         app:layout_constraintEnd_toEndOf="parent"
@@ -147,6 +147,17 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/earthDateTextView" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="Save"
+        app:layout_constraintBottom_toTopOf="@+id/curiosityImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
