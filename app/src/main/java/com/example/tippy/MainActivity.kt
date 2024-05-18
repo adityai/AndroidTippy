@@ -8,12 +8,37 @@ import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.room.*
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 import javax.net.ssl.*
+
+@Database(entities = [PhotoEntity::class], version = 1)
+abstract class PhotoDatabase : RoomDatabase() {
+    abstract fun photoDao(): PhotoDao
+}
+
+@Dao
+interface PhotoDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(photo: PhotoEntity)
+
+    @Query("SELECT * FROM photos")
+    suspend fun getAllPhotos(): List<PhotoEntity>
+}
+
+@Entity(tableName = "photos")
+data class PhotoEntity(
+    @PrimaryKey val id: String,
+    val earthDate: String
+)
+
 
 private const val TAG = "MainActivity"
 private const val INITIAL_TIP_PERCENT = 15
@@ -27,8 +52,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textViewTipDescription: TextView
     private lateinit var textViewFunnyMessage: TextView
 
+    companion object {
+        lateinit var database: PhotoDatabase
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        database = Room.databaseBuilder(
+            applicationContext,
+            PhotoDatabase::class.java, "photo-database"
+        ).build()
         setContentView(R.layout.activity_main)
         curiosity()
         tippy()
@@ -109,6 +142,12 @@ class MainActivity : AppCompatActivity() {
             val earthDate = earthDateTextView.text.toString()
             val id = imageView.contentDescription.toString()
             Log.d("Save Photo Info:", "ID: $id, Date: $earthDate")
+            val photoEntity = PhotoEntity(id = "$id", earthDate = "$earthDate")
+            runBlocking {
+                launch(Dispatchers.IO) {
+                    MainActivity.database.photoDao().insert(photoEntity)
+                }
+            }
         }
     }
 
