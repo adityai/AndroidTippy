@@ -160,24 +160,30 @@ class MainActivity : AppCompatActivity() {
             runBlocking {
                 launch(Dispatchers.IO) {
                     val allSavedPhotos = MainActivity.database.photoDao().getAllPhotos()
-                    Log.d("Photo", "imgSrc: ${allSavedPhotos[savedPhotoIndex].imgSrc}, Date: ${allSavedPhotos[savedPhotoIndex].earthDate}")
+                    val allSavedPhotosSize = allSavedPhotos.size
+                    if (allSavedPhotosSize > 0) {
+                        Log.i("Saved Photos:", "There are ${allSavedPhotosSize} saved photos.")
+                        Log.d("Photo", "imgSrc: ${allSavedPhotos[savedPhotoIndex].imgSrc}, Date: ${allSavedPhotos[savedPhotoIndex].earthDate}")
+                        // Switch to the main thread for UI operations
+                        runOnUiThread {
+                            val imageView = findViewById<ImageView>(R.id.curiosityImageView)
+                            val earthDateTextView = findViewById<TextView>(R.id.earthDateTextView)
+                            imageView.contentDescription = allSavedPhotos[savedPhotoIndex].imgSrc.toString()
+                            Picasso.get().load(allSavedPhotos[savedPhotoIndex].imgSrc).into(imageView)
+                            earthDateTextView.text = allSavedPhotos[savedPhotoIndex].earthDate.toString()
 
-                    // Switch to the main thread for UI operations
-                    runOnUiThread {
-                        val imageView = findViewById<ImageView>(R.id.curiosityImageView)
-                        val earthDateTextView = findViewById<TextView>(R.id.earthDateTextView)
-                        imageView.contentDescription = allSavedPhotos[savedPhotoIndex].imgSrc.toString()
-                        Picasso.get().load(allSavedPhotos[savedPhotoIndex].imgSrc).into(imageView)
-                        earthDateTextView.text = allSavedPhotos[savedPhotoIndex].earthDate.toString()
-
-                        val allSavedPhotosSize = allSavedPhotos.size
-                        if (savedPhotoIndex + 1 == allSavedPhotosSize) {
-                            // Reset the index if it exceeds the size of the list
-                            savedPhotoIndex = 0
-                        } else {
-                            savedPhotoIndex++
+                            if (savedPhotoIndex + 1 == allSavedPhotosSize) {
+                                // Reset the index if it exceeds the size of the list
+                                savedPhotoIndex = 0
+                            } else {
+                                savedPhotoIndex++
+                            }
                         }
                     }
+                    else {
+                        Log.i("Saved Photos:", "There are no saved photos.")
+                    }
+
                 }
             }
         }
