@@ -35,7 +35,7 @@ interface PhotoDao {
 
 @Entity(tableName = "photos")
 data class PhotoEntity(
-    @PrimaryKey val id: String,
+    @PrimaryKey val imgSrc: String,
     val earthDate: String
 )
 
@@ -109,14 +109,14 @@ class MainActivity : AppCompatActivity() {
                             var randomPhoto = photos.random()
                             Picasso.get().load(randomPhoto.img_src).into(imageView)
                             earthDateTextView.text = randomPhoto.earth_date
-                            imageView.contentDescription = randomPhoto.id.toString()
+                            imageView.contentDescription = randomPhoto.img_src.toString()
                         }
 
                         // Initially, display a random image
                         runOnUiThread {
                             Picasso.get().load(randomPhoto.img_src).into(imageView)
                             earthDateTextView.text = randomPhoto.earth_date
-                            imageView.contentDescription = randomPhoto.id.toString()
+                            imageView.contentDescription = randomPhoto.img_src.toString()
                         }
                     } else {
                         Log.i("Curiosity:", "No photos found. Retrying...")
@@ -140,12 +140,16 @@ class MainActivity : AppCompatActivity() {
             val imageView = findViewById<ImageView>(R.id.curiosityImageView)
             val earthDateTextView = findViewById<TextView>(R.id.earthDateTextView)
             val earthDate = earthDateTextView.text.toString()
-            val id = imageView.contentDescription.toString()
-            Log.d("Save Photo Info:", "ID: $id, Date: $earthDate")
-            val photoEntity = PhotoEntity(id = "$id", earthDate = "$earthDate")
+            val imgSrc = imageView.contentDescription.toString()
+            Log.d("Save Photo Info:", "ID: $imgSrc, Date: $earthDate")
+            val photoEntity = PhotoEntity(imgSrc = "$imgSrc", earthDate = "$earthDate")
             runBlocking {
                 launch(Dispatchers.IO) {
                     MainActivity.database.photoDao().insert(photoEntity)
+                    val allPhotos = MainActivity.database.photoDao().getAllPhotos()
+                    for (photo in allPhotos) {
+                        Log.d("Photo", "imgSrc: ${photo.imgSrc}, Date: ${photo.earthDate}")
+                    }
                 }
             }
         }
