@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         lateinit var database: PhotoDatabase
+        var savedPhotoIndex: Int = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -149,6 +150,33 @@ class MainActivity : AppCompatActivity() {
                     val allPhotos = MainActivity.database.photoDao().getAllPhotos()
                     for (photo in allPhotos) {
                         Log.d("Photo", "imgSrc: ${photo.imgSrc}, Date: ${photo.earthDate}")
+                    }
+                }
+            }
+        }
+
+        val showSavedButton = findViewById<Button>(R.id.showSavedButton)
+        showSavedButton.setOnClickListener {
+            runBlocking {
+                launch(Dispatchers.IO) {
+                    val allSavedPhotos = MainActivity.database.photoDao().getAllPhotos()
+                    Log.d("Photo", "imgSrc: ${allSavedPhotos[savedPhotoIndex].imgSrc}, Date: ${allSavedPhotos[savedPhotoIndex].earthDate}")
+
+                    // Switch to the main thread for UI operations
+                    runOnUiThread {
+                        val imageView = findViewById<ImageView>(R.id.curiosityImageView)
+                        val earthDateTextView = findViewById<TextView>(R.id.earthDateTextView)
+                        imageView.contentDescription = allSavedPhotos[savedPhotoIndex].imgSrc.toString()
+                        Picasso.get().load(allSavedPhotos[savedPhotoIndex].imgSrc).into(imageView)
+                        earthDateTextView.text = allSavedPhotos[savedPhotoIndex].earthDate.toString()
+
+                        val allSavedPhotosSize = allSavedPhotos.size
+                        if (savedPhotoIndex + 1 == allSavedPhotosSize) {
+                            // Reset the index if it exceeds the size of the list
+                            savedPhotoIndex = 0
+                        } else {
+                            savedPhotoIndex++
+                        }
                     }
                 }
             }
