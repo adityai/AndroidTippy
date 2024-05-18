@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.squareup.picasso.Picasso
@@ -68,28 +65,39 @@ class MainActivity : AppCompatActivity() {
                     val jsonData = response.body?.string()
                     val photos = parseJson(jsonData)
                     // Get a random photo from the list of photos
-                    val randomPhoto = photos.random()
-                    Log.d("Photo", "ID: ${randomPhoto.id}, URL: ${randomPhoto.img_src}, Date: ${randomPhoto.earth_date}")
-                    val imageView = findViewById<ImageView>(R.id.curiosityImageView)
-                    val earthDateTextView = findViewById<TextView>(R.id.earthDateTextView)
+                    if (photos.isNotEmpty()) {
+                        val randomPhoto = photos.random()
+                        Log.d("Photo", "ID: ${randomPhoto.id}, URL: ${randomPhoto.img_src}, Date: ${randomPhoto.earth_date}")
+                        val imageView = findViewById<ImageView>(R.id.curiosityImageView)
+                        val earthDateTextView = findViewById<TextView>(R.id.earthDateTextView)
 
-                    // Set OnClickListener to display a random image when curiosityImageView is clicked
-                    imageView.setOnClickListener {
-                        var randomPhoto = photos.random()
-                        Picasso.get().load(randomPhoto.img_src).into(imageView)
-                        earthDateTextView.text = randomPhoto.earth_date
-                    }
+                        // Set OnClickListener to display a random image when curiosityImageView is clicked
+                        imageView.setOnClickListener {
+                            var randomPhoto = photos.random()
+                            Picasso.get().load(randomPhoto.img_src).into(imageView)
+                            earthDateTextView.text = randomPhoto.earth_date
+                        }
 
-                    // Initially, display a random image
-                    runOnUiThread {
-                        Picasso.get().load(randomPhoto.img_src).into(imageView)
-                        earthDateTextView.text = randomPhoto.earth_date
+                        // Initially, display a random image
+                        runOnUiThread {
+                            Picasso.get().load(randomPhoto.img_src).into(imageView)
+                            earthDateTextView.text = randomPhoto.earth_date
+                        }
+                    } else {
+                        Log.i("Curiosity:", "No photos found. Retrying...")
+                        curiosity()
                     }
                 } else {
                     Log.e("API Call", "Failed: ${response.code}")
                 }
             }
         })
+
+        // Set OnClickListener on anotherEarthDateButton to display another earth date image
+        val anotherEarthDateButton = findViewById<Button>(R.id.anotherEarthDateButton)
+        anotherEarthDateButton.setOnClickListener {
+            curiosity()
+        }
     }
 
     data class Photo(
