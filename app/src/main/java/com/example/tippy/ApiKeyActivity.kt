@@ -36,10 +36,15 @@ class ApiKeyActivity : AppCompatActivity() {
         runBlocking {
             launch(Dispatchers.IO) {
                 val apiKeys = ApiKeyActivity.database.apiKeyDao().getApiKey()
-                val apiKeyString = apiKeys[0].apikey
+                var apiKeyString = ""
+                if (apiKeys.isNotEmpty()) {
+                        apiKeyString = apiKeys[0].apikey
+                }
 
                 runOnUiThread {
-                    apiKeyEditText.text = Editable.Factory.getInstance().newEditable(apiKeyString)
+                    if (apiKeyString.isNotEmpty()) {
+                        apiKeyEditText.text = Editable.Factory.getInstance().newEditable(apiKeyString)
+                    }
                 }
             }
         }

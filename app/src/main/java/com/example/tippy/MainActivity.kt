@@ -65,6 +65,10 @@ class MainActivity : AppCompatActivity() {
             applicationContext,
             PhotoDatabase::class.java, "photo-database"
         ).build()
+        ApiKeyActivity.database = Room.databaseBuilder(
+            applicationContext,
+            ApiKeyDatabase::class.java, "apikey-database"
+        ).build()
         setContentView(R.layout.activity_main)
 
         val setApiKeyButton = findViewById<Button>(R.id.setApiKeyButton)
@@ -99,11 +103,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun curiosity() {
-        val apiKey = "5M12ifePfRKP7c9ywgRFXLYq5J8JHasG8zOKaect"
-//        var apiKey = getApiKey()
-//        if (apiKey.isEmpty()) {
-//            apiKey = "DEMO_KEY"
-//        }
+//        val apiKey = "5M12ifePfRKP7c9ywgRFXLYq5J8JHasG8zOKaect"
+        var apiKey = getApiKey()
+        if (apiKey.isEmpty()) {
+            apiKey = "DEMO_KEY"
+        }
         val earthDate = randomDate()
 
         val url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=$apiKey&earth_date=$earthDate"
