@@ -102,19 +102,21 @@ class MainActivity : AppCompatActivity() {
                     if (photos.isNotEmpty()) {
                         val randomPhoto = photos.random()
                         Log.d("Photo", "ID: ${randomPhoto.id}, URL: ${randomPhoto.img_src}, Date: ${randomPhoto.earth_date}")
-                        val imageView = findViewById<ImageView>(R.id.curiosityImageView)
-                        val earthDateTextView = findViewById<TextView>(R.id.earthDateTextView)
 
-                        // Set OnClickListener to display a random image when curiosityImageView is clicked
-                        imageView.setOnClickListener {
-                            var randomPhoto = photos.random()
-                            Picasso.get().load(randomPhoto.img_src).into(imageView)
-                            earthDateTextView.text = randomPhoto.earth_date
-                            imageView.contentDescription = randomPhoto.img_src.toString()
-                        }
-
-                        // Initially, display a random image
+                        // Run everything UI related on the main thread
                         runOnUiThread {
+                            val imageView = findViewById<ImageView>(R.id.curiosityImageView)
+                            val earthDateTextView = findViewById<TextView>(R.id.earthDateTextView)
+
+                            // Set OnClickListener to display a random image when curiosityImageView is clicked
+                            imageView.setOnClickListener {
+                                val newRandomPhoto = photos.random()
+                                Picasso.get().load(newRandomPhoto.img_src).into(imageView)
+                                earthDateTextView.text = newRandomPhoto.earth_date
+                                imageView.contentDescription = newRandomPhoto.img_src.toString()
+                            }
+
+                            // Initially, display a random image
                             Picasso.get().load(randomPhoto.img_src).into(imageView)
                             earthDateTextView.text = randomPhoto.earth_date
                             imageView.contentDescription = randomPhoto.img_src.toString()
@@ -132,6 +134,7 @@ class MainActivity : AppCompatActivity() {
         // Set OnClickListener on anotherEarthDateButton to display another earth date image
         val anotherEarthDateButton = findViewById<Button>(R.id.anotherEarthDateButton)
         anotherEarthDateButton.setOnClickListener {
+            Log.i("Another Earth Date:", "Button clicked")
             curiosity()
         }
 
