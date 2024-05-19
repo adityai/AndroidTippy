@@ -102,6 +102,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //TODO: Setup a slide show activity of the saved images
+
     private fun curiosity() {
 //        val apiKey = "5M12ifePfRKP7c9ywgRFXLYq5J8JHasG8zOKaect"
         var apiKey = getApiKey()
