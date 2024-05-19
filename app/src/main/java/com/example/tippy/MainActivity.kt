@@ -1,6 +1,7 @@
 package com.example.tippy
 
 import android.animation.ArgbEvaluator
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +14,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.*
 import org.json.JSONObject
@@ -64,6 +66,13 @@ class MainActivity : AppCompatActivity() {
             PhotoDatabase::class.java, "photo-database"
         ).build()
         setContentView(R.layout.activity_main)
+
+        val setApiKeyButton = findViewById<Button>(R.id.setApiKeyButton)
+        setApiKeyButton.setOnClickListener {
+            val intent = Intent(this, ApiKeyActivity::class.java)
+            startActivity(intent)
+        }
+
         curiosity()
         tippy()
     }
@@ -76,8 +85,25 @@ class MainActivity : AppCompatActivity() {
         return "$year-$month-$day"
     }
 
+    private fun getApiKey(): String {
+        return runBlocking {
+            withContext(Dispatchers.IO) {
+                val apiKeys = ApiKeyActivity.database.apiKeyDao().getApiKey()
+                if (apiKeys.isNotEmpty()) {
+                    apiKeys[0].apikey
+                } else {
+                    "" // Return an empty string or handle the case when no API keys are found
+                }
+            }
+        }
+    }
+
     private fun curiosity() {
         val apiKey = "5M12ifePfRKP7c9ywgRFXLYq5J8JHasG8zOKaect"
+//        var apiKey = getApiKey()
+//        if (apiKey.isEmpty()) {
+//            apiKey = "DEMO_KEY"
+//        }
         val earthDate = randomDate()
 
         val url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=$apiKey&earth_date=$earthDate"
@@ -128,6 +154,12 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Log.e("API Call", "Failed: ${response.code}")
                 }
+
+//                val setApiKeyButton = findViewById<Button>(R.id.setApiKeyButton)
+//                setApiKeyButton.setOnClickListener {
+//                    val intent = Intent(this, ApiKeyActivity::class.java)
+//                    startActivity(intent)
+//                }
             }
         })
 
