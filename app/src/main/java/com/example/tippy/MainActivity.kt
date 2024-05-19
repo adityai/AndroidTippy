@@ -108,6 +108,8 @@ class MainActivity : AppCompatActivity() {
         if (apiKey.isEmpty()) {
             apiKey = "DEMO_KEY"
         }
+        //TODO: If apiKey is DEMO_KEY, display a message to the user that they need to set an API key
+        //TODO: If apiKey is DEMO_KEY, allow the user to click on the AnotherEarthDate button three times and then stop showing the curiosity image
         val earthDate = randomDate()
 
         val url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=$apiKey&earth_date=$earthDate"
