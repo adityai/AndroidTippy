@@ -77,6 +77,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val showSlideShowButton = findViewById<Button>(R.id.showSlideShowButton)
+        showSlideShowButton.setOnClickListener {
+            val intent = Intent(this, SlideShowActivity::class.java)
+            startActivity(intent)
+        }
+
         curiosity()
         tippy()
     }

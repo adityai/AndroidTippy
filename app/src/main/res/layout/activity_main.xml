@@ -141,11 +141,22 @@
         android:id="@+id/anotherEarthDateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Another Earth Date"
+        android:layout_marginTop="8dp"
+        android:text="Earth Date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.077"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/earthDateTextView" />
+
+    <Button
+        android:id="@+id/showSlideShowButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Slide Show"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.769"
+        app:layout_constraintStart_toEndOf="@+id/anotherEarthDateButton"
         app:layout_constraintTop_toBottomOf="@+id/earthDateTextView" />
 
     <Button
@@ -176,7 +187,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="4dp"
         android:text="Set API Key"
         app:layout_constraintBottom_toTopOf="@+id/curiosityImageView"
         app:layout_constraintEnd_toEndOf="parent"
